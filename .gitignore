@@ -1,0 +1,20 @@
+# Build output
+bin/
+obj/
+
+# Visual Studio
+.vs/
+*.user
+*.suo
+*.rsuser
+
+# Temporary editor files
+*.TMP
+*~RF*.TMP
+
+# Local secrets and databases (never commit)
+*.env
+appsettings.*.local.json
+*.db
+*.mdf
+*.ldf

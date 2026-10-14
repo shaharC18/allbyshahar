@@ -1,0 +1,94 @@
+﻿<!DOCTYPE html>
+@using AllByShahar.Utility
+@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor HttpContextAccessor
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - AllByShahar</title>
+    <link rel="stylesheet" href="~/css/bootswatch_litera.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" />
+    <link rel="stylesheet" href="//cdn.datatables.net/1.11.2/css/jquery.dataTables.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+</head>
+<body>
+        <header>
+        <nav class="navbar navbar-expand-lg bg-primary" data-bs-theme="dark" dir="rtl">
+                <div class="container">
+                    <a class="navbar-brand" asp-area="" asp-page="/Index">AllByShahar</a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                            aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between text-dark">
+                        <ul class="navbar-nav flex-grow-1">
+                            @* <li class="nav-item">
+                                <a class="nav-link text-light" asp-area="" asp-page="/Index">בית</a>
+                            </li> *@
+                        @if (User.IsInRole(SD.ManagerRole) || User.IsInRole(SD.FrontDeskRole))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link " asp-area="" asp-page="/Admin/Order/OrderList"> רשימת הזמנות </a>
+                            </li>
+                        }
+                        @if (User.IsInRole(SD.ManagerRole))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link " asp-area="" asp-page="/Admin/Order/ManageOrder">ניהול הזמנות</a>
+                            </li>
+                        }
+                        @if (User.IsInRole(SD.ManagerRole))
+                        {
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">הנהלה</a>
+                                <div class="dropdown-menu">
+                                    <a class="dropdown-item text-end" asp-area="" asp-page="/Admin/Categories/Index">קטגוריות</a>
+                                    <a class="dropdown-item text-end" asp-area="" asp-page="/Admin/TypeItems/Index">סוגי פריטים</a>
+                                    <a class="dropdown-item text-end" asp-area="" asp-page="/Admin/MenuItems/Index">תפריט פריטים</a>
+
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item text-end" asp-area="Identity" asp-page="/Account/Register">רישום עובד</a>
+                                </div>
+                            </li>
+                        }
+                        <li>
+                            <a class="nav-link text-white-50" asp-area="" asp-page="/Customer/Cart/Index">
+                                @await Component.InvokeAsync("ShoppingCart")
+                            </a>
+                        </li>
+                        
+                    </ul>
+                    <partial name="_LoginPartial" />
+                    </div>
+                </div>
+            </nav>
+        </header>
+        <div class="container">
+            <main role="main" class="pb-3">
+                <partial name="_Notification" />
+                @RenderBody()
+            </main>
+        </div>
+
+            <footer class="border-top footer text-muted bordrk-suber-datle bg-dark">
+                <div class="container">
+            &nbsp;&nbsp;&nbsp;
+            &nbsp;&nbsp;&nbsp;
+                    &copy; 2023 - AllByShahar - <a asp-area="" asp-page="/Privacy">פרטיות</a>
+                </div>
+            </footer>
+
+            
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <!-- JavaScript Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ" crossorigin="anonymous"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="https://cdn.tiny.cloud/1/n94ifuzvl80pchikopiwgz2esrw8n28dwcywvpejlqrregfp/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
+    <script src="//cdn.datatables.net/1.11.2/js/jquery.dataTables.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

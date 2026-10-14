@@ -1,0 +1,57 @@
+﻿@page
+@model AllByShahar.Pages.Admin.TypeItems.IndexModel
+@{
+}
+
+
+<div class="container p-3" dir="rtl">
+<div class="row pt-4">
+	<div class="col-6">
+		<h2 class="text-primary">רשימת סוגי פריטים</h2>
+	</div>
+	<div class="col-6 text-start fw-bold">
+		<a asp-page="create" class="btn btn-primary text-end">
+				<i class="bi bi-plus-square"></i> &nbsp;יצירת סוג חדש
+		</a>
+	</div>
+</div>
+
+<br />
+<br />
+
+<table class="table table-bordered table-striped" style="width:100%" >
+	<thead>
+		<tr>
+			<th>
+				שם הפריט
+			</th>
+			
+			<th></th>
+		</tr>
+	</thead>
+	<tbody>
+			@foreach (var obj in Model.Types)
+		{
+			<tr>
+				<td width="50%">@obj.Name</td>
+					<td>
+						<div class="w-75 btn-group" role="group" dir="ltr">
+							<a asp-page="Edit" asp-route-id="@obj.Id" class="btn btn-primary mx-2">
+								<i class="bi bi-pencil-square"></i>
+							</a>
+							<a asp-page="Delete" asp-route-id="@obj.Id" class="btn btn-danger mx-2">
+
+								<i class="bi bi-trash-fill"></i>
+							</a>
+						</div>
+					</td>
+			</tr>
+
+		}
+
+	</tbody>
+</table>
+
+</div>
+   
+

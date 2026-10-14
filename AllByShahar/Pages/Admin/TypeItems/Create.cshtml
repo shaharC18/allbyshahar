@@ -1,0 +1,48 @@
+﻿@page
+@model AllByShahar.Pages.Admin.TypeItems.CreateModel
+@{
+}
+@if (TempData["success"] != null)
+{
+	
+	<script src="~/lib/jquery/dist/jquery.min.js"></script>
+	<script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+	<script TypeItem="text/javascript">
+		toastr.success('@TempData["success"]');
+	</script>
+}
+@if (TempData["error"] != null)
+{
+	<script src="~/lib/jquery/dist/jquery.min.js"></script>
+	<script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+	<script TypeItem="text/javascript">
+		toastr.error('@TempData["error"]');
+	</script>
+}
+<form method="post" dir="rtl">
+	<div class="border p-3 mt-4">
+		<div class="row pb-2">
+			<h2 class="text-primary pl-3">יצירת סוג פריט</h2>
+			<hr />
+		</div>
+ 
+
+		<div class="mb-3">
+			<label asp-for="TypeItem.Name"></label>
+			<input asp-for="TypeItem.Name" class="form-control" />
+			<span asp-validation-for="TypeItem.Name" class="text-danger"></span>
+		</div>
+		
+		<button TypeItem="submit" class="btn btn-primary" style="width:150px;">צור חדש</button>
+		<a asp-page="Index" class="btn btn-secondary" style="width:150px;"> בחזרה לרשימה</a>
+		<div>
+		
+		</div>
+	</div>
+</form>
+
+@section Scripts{
+	@{
+		<partial name="_ValidationScriptsPartial" />
+	}
+}

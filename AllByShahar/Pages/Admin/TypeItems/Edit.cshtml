@@ -1,0 +1,31 @@
+﻿@page
+@model AllByShahar.Pages.Admin.TypeItems.EditModel
+@{
+}
+<form method="post" dir="rtl">
+	<input hidden asp-for="TypeItem.Id" />
+
+	<div class="border p-3 mt-4">
+		<div class="row pb-2">
+			<h2 class="text-primary pl-3">עריכת סוג פריט</h2>
+			<hr />
+		</div>
+ 
+
+		<div class="mb-3">
+			<label asp-for="TypeItem.Name"></label>
+			<input asp-for="TypeItem.Name" class="form-control" />
+			<span asp-validation-for="TypeItem.Name" class="text-danger"></span>
+		</div>
+		
+		<button type="submit" class="btn btn-primary" style="width:150px;">עדכון</button>
+		<a asp-page="Index" class="btn btn-secondary" style="width:150px;"> בחזרה לרשימה</a>
+
+	</div>
+</form>
+
+@section Scripts{
+	@{
+		<partial name="_ValidationScriptsPartial" />
+	}
+}

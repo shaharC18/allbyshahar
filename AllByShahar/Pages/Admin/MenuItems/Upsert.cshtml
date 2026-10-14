@@ -1,0 +1,112 @@
+﻿@page
+@model AllByShahar.Pages.Admin.MenuItems.UpsertModel
+@{
+}
+@if (TempData["success"] != null)
+{
+	
+	<script src="~/lib/jquery/dist/jquery.min.js"></script>
+	<script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+	<script type="text/javascript">
+		toastr.success('@TempData["success"]');
+	</script>
+}
+@if (TempData["error"] != null)
+{
+	<script src="~/lib/jquery/dist/jquery.min.js"></script>
+	<script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+	<script type="text/javascript">
+		toastr.error('@TempData["error"]');
+	</script>
+}
+<form method="post" enctype="multipart/form-data" dir="rtl">
+	<input asp-for="MenuItem.Id" hidden />
+	<div class="border p-3 mt-4">
+		<div class="row pb-2">
+			<div class="col-9">
+				<h2 class="text-primary pl-3">
+					@(Model.MenuItem.Id != 0 ? "עדכון" : "יצירת") פריט
+				</h2>
+				<hr />
+
+
+				<div class="mb-3">
+					<label asp-for="MenuItem.Name"></label>
+					<input asp-for="MenuItem.Name" class="form-control" />
+					<span asp-validation-for="MenuItem.Name" class="text-danger"></span>
+				</div>
+				<div class="mb-3">
+					<label asp-for="MenuItem.Description"></label>
+					<textarea asp-for="MenuItem.Description" class="form-control"></textarea>
+					<span asp-validation-for="MenuItem.Description" class="text-danger"></span>
+				</div>
+				<div class="mb-3">
+					<label asp-for="MenuItem.Price"></label>
+					<input asp-for="MenuItem.Price" class="form-control" />
+					<span asp-validation-for="MenuItem.Price" class="text-danger"></span>
+				</div>
+				<div class="mb-3">
+					<label asp-for="MenuItem.Image"></label>
+					<input type="file" name="files" id="uploadBox" class="form-control" />
+				</div>
+				<div class="mb-3">
+					<label asp-for="MenuItem.CategoryId"></label>
+					<select asp-for="MenuItem.CategoryId" asp-items="Model.CategoryList" class="form-select">
+						<option disabled selected>-בחירת קטגוריה-</option>
+					</select>
+
+					<span asp-validation-for="MenuItem.CategoryId" class="text-danger">בחר קטגוריה</span>
+				</div>
+
+				<div class="mb-3">
+					<label asp-for="MenuItem.TypeId"></label>
+					<select asp-for="MenuItem.TypeId" asp-items="Model.TypeList" class="form-select">
+						<option disabled selected>-בחירת סוג-</option>
+					</select>
+
+					<span asp-validation-for="MenuItem.TypeId" class="text-danger">בחר סוג</span>
+				</div>
+			</div>
+			<div class="col-3">
+				@if (Model.MenuItem.Id != 0)
+				{
+					<img src="@Model.MenuItem.Image" width="100%" style="border-radius:5px; border:1px solid #bbb9b9" />
+				}
+			</div>
+		</div>
+		@if (Model.MenuItem.Id != 0)
+		{
+			<button type="submit" class="btn btn-primary" style="width:150px;">עדכון פריט</button>
+		}
+		else
+		{
+			<button type="submit" onclick="return ValidateInput()" class="btn btn-primary" style="width:150px;">צור</button>
+		}		<a asp-page="Index" class="btn btn-secondary" style="width:150px;"> בחזרה לרשימה</a>
+
+	</div>
+
+</form>
+
+@section Scripts{
+	<script>
+		tinymce.init({
+			selector: 'textarea',
+			plugins: 'advlist autolink lists link image charmap print preview hr anchor pagebreak',
+			toolbar_mode: 'floating',
+		});
+		function ValidateInput() {
+			if (document.getElementById("uploadBox").value == "") {
+				Swal.fire({
+					icon: 'error',
+					title: '...'+'אופס',
+					text:'!'+'בבקשה העלה תמונה',
+				});
+				return false;
+			}
+			return true;
+		}
+	</script>
+	@{
+		<partial name="_ValidationScriptsPartial" />
+	}
+}
