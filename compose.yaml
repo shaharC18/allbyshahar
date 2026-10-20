@@ -3,6 +3,7 @@ name: allbyshahar
 services:
   web:
     build: .
+    image: ghcr.io/shaharc18/allbyshahar:latest
     ports:
       - "5050:80"
     environment:
