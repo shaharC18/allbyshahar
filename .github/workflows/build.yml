@@ -23,3 +23,12 @@ jobs:
 
       - name: Build
         run: dotnet build AllByShahar.sln --configuration Release --no-restore
+    docker:
+      needs:build
+      runs-on: ubuntu-latest
+      steps:
+        - name: Get the code
+          uses: actions/checkout@v4
+
+        - name: build docker image
+          run: doclker build -t allbyshahar:test .
