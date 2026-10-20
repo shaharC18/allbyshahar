@@ -1,4 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
+using AllByShahar.Utility;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using AllByShahar.DataAccess.Data;
@@ -9,6 +11,7 @@ using AllByShahar.Models;
 namespace AllByShahar.Pages.Admin.MenuItems
 {
 	[BindProperties]
+	[Authorize(Roles = SD.ManagerRole)]
 	public class UpsertModel : PageModel
 	{
 		private readonly IMenuItemRepository _dbMenuItem;

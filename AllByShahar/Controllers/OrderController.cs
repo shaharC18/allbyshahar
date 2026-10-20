@@ -1,16 +1,14 @@
-﻿using AllByShahar.DataAccess.Repository.IRepository;
+using AllByShahar.DataAccess.Repository.IRepository;
 using AllByShahar.Utility;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
-using System.IO;
 using System.Linq;
-using AllByShahar.DataAccess.Repository.IRepository;
 
 namespace AllByShahar.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = SD.ManagerRole + "," + SD.FrontDeskRole)]
     public class OrderController : Controller
     {
 		private readonly IOrderHeaderRepository _orderHeader;
@@ -21,7 +19,6 @@ namespace AllByShahar.Controllers
 		}
 
 		[HttpGet]
-        [Authorize]
         public IActionResult Get(string? status=null)
         {
 
@@ -50,7 +47,17 @@ namespace AllByShahar.Controllers
                 }
             }
 
-            return Json(new { data = OrderHeaderList });
+            // מחזירים רק את השדות שהטבלה צריכה, בלי פרטי המשתמש הרגישים (סיסמה מוצפנת וכו')
+            var result = OrderHeaderList.Select(u => new
+            {
+                id = u.Id,
+                pickupName = u.PickupName,
+                applicationUser = new { email = u.ApplicationUser.Email },
+                orderTotal = u.OrderTotal,
+                pickUpTime = u.PickUpTime
+            });
+
+            return Json(new { data = result });
         }
 
         

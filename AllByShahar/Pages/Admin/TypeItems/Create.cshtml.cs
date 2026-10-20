@@ -1,4 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
+using AllByShahar.Utility;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using NuGet.Protocol;
 using AllByShahar.DataAccess.Data;
@@ -9,6 +11,7 @@ using AllByShahar.Models;
 namespace AllByShahar.Pages.Admin.TypeItems
 {
     [BindProperties]
+    [Authorize(Roles = SD.ManagerRole)]
     public class CreateModel : PageModel
     {
         private readonly ITypeItemRepository _dbType;

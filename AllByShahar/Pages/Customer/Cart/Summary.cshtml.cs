@@ -91,7 +91,7 @@ namespace AllByShahar.Pages.Customer.Cart
 				}
 				//_shoppingCart.RemoveRange(ShoppingCartList);
 				_shoppingCart.Save();
-				var domain = "https://localhost:7270/";
+				var domain = $"{Request.Scheme}://{Request.Host}/";
 				var options = new SessionCreateOptions
                 {
 					LineItems = new List<SessionLineItemOptions>(), 

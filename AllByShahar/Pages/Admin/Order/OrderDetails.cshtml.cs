@@ -1,4 +1,5 @@
 using AllByShahar.DataAccess.Repository.IRepository;
+using Microsoft.AspNetCore.Authorization;
 using AllByShahar.Models;
 using AllByShahar.Models.ViewModel;
 using AllByShahar.Utility;
@@ -10,6 +11,7 @@ using System.Linq;
 
 namespace AllByShahar.Pages.Admin.Order
 {
+    [Authorize(Roles = SD.ManagerRole + "," + SD.FrontDeskRole)]
     public class OrderDetailsModel : PageModel
     {
         private readonly IOrderDetailRepository _orderDetail;
