@@ -34,8 +34,32 @@ jobs:
       - name: build docker image
         run: docker build -t allbyshahar:test .
 
+  smoke-test:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get the code
+        uses: actions/checkout@v4
+
+      - name: Create the .env file
+        run: echo "SA_PASSWORD=Ci_Test_Pass_123!" > .env
+
+      - name: Start the site and the database
+        run: docker compose up -d --build --wait
+
+      - name: Check that the site answers
+        run: curl --retry 20 --retry-delay 5 --retry-all-errors -fsS -o /dev/null http://localhost:5050/
+
+      - name: Show logs if something failed
+        if: failure()
+        run: docker compose logs
+
+      - name: Clean up
+        if: always()
+        run: docker compose down -v
+
   publish:
-    needs: docker
+    needs: [docker, smoke-test]
     if: github.event_name == 'push'
     runs-on: ubuntu-latest
     permissions:
