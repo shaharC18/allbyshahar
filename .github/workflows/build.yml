@@ -33,3 +33,27 @@ jobs:
 
       - name: build docker image
         run: docker build -t allbyshahar:test .
+
+  publish:
+    needs: docker
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - name: Get the code
+        uses: actions/checkout@v4
+
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build the image
+        run: docker build -t ghcr.io/shaharc18/allbyshahar:latest -t ghcr.io/shaharc18/allbyshahar:${{ github.sha }} .
+
+      - name: Push the image
+        run: docker push --all-tags ghcr.io/shaharc18/allbyshahar
