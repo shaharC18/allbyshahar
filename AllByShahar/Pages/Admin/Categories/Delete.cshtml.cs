@@ -1,4 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
+using AllByShahar.Utility;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using AllByShahar.DataAccess.Data;
 using AllByShahar.DataAccess.Repository;
@@ -8,6 +10,7 @@ using AllByShahar.Models;
 namespace AllByShahar.Pages.Admin.Categories
 {
 	[BindProperties]
+	[Authorize(Roles = SD.ManagerRole)]
 	public class DeleteModel : PageModel
     {
         private readonly ICategoryRepository _dbCategory;

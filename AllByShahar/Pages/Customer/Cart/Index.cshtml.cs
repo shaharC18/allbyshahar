@@ -41,15 +41,29 @@ namespace AllByShahar.Pages.Customer.Cart
 				}
             }
         }
+		// מחזיר פריט סל רק אם הוא שייך למשתמש המחובר
+		private ShoppingCart? GetUserCart(int cartId)
+		{
+			var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+			return _shoppingCart.GetFirstOrDefault(u => u.Id == cartId && u.ApplicationUserId == userId);
+		}
 		public IActionResult OnPostPlus(int cartId)
 		{
-			var cart = _shoppingCart.GetFirstOrDefault(u => u.Id == cartId);
+			var cart = GetUserCart(cartId);
+			if (cart == null)
+			{
+				return NotFound();
+			}
 			_shoppingCart.IncrementCount(cart, 1);
 			return RedirectToPage("/Customer/Cart/Index");
 		}
 		public IActionResult OnPostMinus(int cartId)
 		{
-			var cart = _shoppingCart.GetFirstOrDefault(u => u.Id == cartId);
+			var cart = GetUserCart(cartId);
+			if (cart == null)
+			{
+				return NotFound();
+			}
             if(cart.Count==1)
             {
 				var count = _shoppingCart.GetAll(u => u.ApplicationUserId == cart.ApplicationUserId).ToList().Count - 1;
@@ -68,7 +82,11 @@ namespace AllByShahar.Pages.Customer.Cart
 		}
 		public IActionResult OnPostRemove(int cartId)
 		{
-			var cart = _shoppingCart.GetFirstOrDefault(u => u.Id == cartId);
+			var cart = GetUserCart(cartId);
+			if (cart == null)
+			{
+				return NotFound();
+			}
 			var count = _shoppingCart.GetAll(u => u.ApplicationUserId == cart.ApplicationUserId).ToList().Count - 1;
 
 			_shoppingCart.Remove(cart);

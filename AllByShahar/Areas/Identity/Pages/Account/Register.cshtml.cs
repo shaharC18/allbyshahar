@@ -154,7 +154,8 @@ namespace AllByShahar.Areas.Identity.Pages.Account
 
                 if (result.Succeeded)
                 {
-                    string role = Request.Form["rdUserRole"].ToString();
+                    // רק מנהל מחובר רשאי לרשום עובדים; כל השאר נרשמים כלקוחות
+                    string role = User.IsInRole(SD.ManagerRole) ? Request.Form["rdUserRole"].ToString() : SD.CustomerRole;
                     
                     if (role == SD.ManagerRole)
                     {

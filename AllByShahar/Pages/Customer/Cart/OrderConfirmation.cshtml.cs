@@ -1,12 +1,15 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Stripe.Checkout;
+using System.Security.Claims;
 using AllByShahar.DataAccess.Repository.IRepository;
 using AllByShahar.Models;
 using AllByShahar.Utility;
 
 namespace AllByShahar.Pages.Customer.Cart
 {
+    [Authorize]
     public class OrderConfirmationModel : PageModel
     {
 
@@ -19,9 +22,15 @@ namespace AllByShahar.Pages.Customer.Cart
 			_orderHeader = orderHeader;
 			_shoppingCart = shoppingCart;
 		}
-		public void OnGet(int id)
+		public IActionResult OnGet(int id)
 		{
+			var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 			OrderHeader orderHeader = _orderHeader.GetFirstOrDefault(u => u.Id == id);
+			// רק בעל ההזמנה יכול לאשר אותה
+			if (orderHeader == null || orderHeader.UserId != userId)
+			{
+				return NotFound();
+			}
 			if (orderHeader.SessionId != null)
 			{
 				var service = new SessionService();
@@ -29,6 +38,7 @@ namespace AllByShahar.Pages.Customer.Cart
 				if (session.PaymentStatus.ToLower() == "paid")
 				{
 					orderHeader.Status = SD.StatusSubmitted;
+					orderHeader.PaymentIntentId = session.PaymentIntentId;
 					_orderHeader.Save();
 				}
 			}
@@ -37,7 +47,7 @@ namespace AllByShahar.Pages.Customer.Cart
 			_shoppingCart.RemoveRange(shoppingCarts);
 			_shoppingCart.Save();
 			OrderId = id;
-
+			return Page();
 		}
 	}
 }
